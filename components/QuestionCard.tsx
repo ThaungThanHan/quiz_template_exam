@@ -47,21 +47,22 @@ export default function QuestionCard({
     
     if (!showResult) {
       if (selectedAnswer === optionIndex) {
-        return baseClass + "border-blue-500 bg-blue-50 text-blue-800 shadow-lg";
+        return baseClass + "border-blue-500 bg-blue-50 text-blue-800 shadow-lg font-semibold";
       }
-      return baseClass + "border-gray-200 hover:border-gray-300 hover:bg-gray-50";
+      return baseClass + "border-gray-300 hover:border-gray-400 hover:bg-gray-50 text-gray-800 font-medium";
     }
     
     // Show results
     if (optionIndex === correctAnswerIndex) {
-      return baseClass + "border-green-500 bg-green-50 text-green-800 shadow-lg";
+      return baseClass + "border-green-500 bg-green-50 text-green-800 shadow-lg font-semibold";
     }
     
     if (selectedAnswer === optionIndex && optionIndex !== correctAnswerIndex) {
-      return baseClass + "border-red-500 bg-red-50 text-red-800 shadow-lg";
+      return baseClass + "border-red-500 bg-red-50 text-red-800 shadow-lg font-semibold";
     }
     
-    return baseClass + "border-gray-200 bg-gray-50 opacity-60";
+    // Improved visibility for unselected options - better contrast and readability
+    return baseClass + "border-gray-300 bg-gray-100 text-gray-600 font-medium";
   };
 
   const getOptionIcon = (optionIndex: number) => {
