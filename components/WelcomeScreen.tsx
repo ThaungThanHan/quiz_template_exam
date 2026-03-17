@@ -27,7 +27,7 @@ export default function WelcomeScreen({ totalQuestions, onStartQuiz }: WelcomeSc
             <span className="text-4xl text-white">🧠</span>
           </div>
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Home remedy Quiz for friends!
+            GLOBAL Quiz for friends!
           </h1>
           <p className="text-xl text-gray-600">
             Test your knowledge with {totalQuestions} questions
