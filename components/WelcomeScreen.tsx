@@ -5,10 +5,11 @@ import Link from 'next/link';
 
 interface WelcomeScreenProps {
   totalQuestions: number;
+  quizSetId: string;
   onStartQuiz: () => void;
 }
 
-export default function WelcomeScreen({ totalQuestions, onStartQuiz }: WelcomeScreenProps) {
+export default function WelcomeScreen({ totalQuestions, quizSetId, onStartQuiz }: WelcomeScreenProps) {
   const audio = QuizAudio.getInstance();
 
   const testCorrectSound = () => {
@@ -27,10 +28,13 @@ export default function WelcomeScreen({ totalQuestions, onStartQuiz }: WelcomeSc
             <span className="text-4xl text-white">🧠</span>
           </div>
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            GLOBAL Quiz for friends!
+            Exit Exam Quiz for friends!
           </h1>
           <p className="text-xl text-gray-600">
-            Test your knowledge with {totalQuestions} questions
+            This is AI-GENERATED and for practice only! NOT EXPOSED QUESTIONS!
+          </p>
+          <p className="text-xl text-pink-600">
+            GOOD LUCK and PLEASE DO NOT FAIL 💖
           </p>
         </div>
 
@@ -86,7 +90,7 @@ export default function WelcomeScreen({ totalQuestions, onStartQuiz }: WelcomeSc
             Start Quiz 🚀
           </button>
           <Link
-            href="/answers"
+            href={`/answers?set=${quizSetId}`}
             className="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-8 py-4 rounded-xl font-semibold text-xl hover:from-gray-600 hover:to-gray-700 transition-all duration-200 hover:scale-105 shadow-lg w-full md:w-auto text-center"
           >
             View Answer Key 📋

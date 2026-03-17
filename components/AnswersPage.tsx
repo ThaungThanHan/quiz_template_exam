@@ -1,9 +1,18 @@
 'use client';
 
-import { mockQuestions } from '@/data/questions';
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { quizSets } from '@/data/quizSets';
 import Link from 'next/link';
 
 export default function AnswersPage() {
+  const searchParams = useSearchParams();
+  const setParam = searchParams.get('set');
+  const initialSet = quizSets.find(s => s.id === setParam) ?? quizSets[0];
+  const [activeSetId, setActiveSetId] = useState(initialSet.id);
+  const activeSet = quizSets.find(s => s.id === activeSetId) ?? quizSets[0];
+  const questions = activeSet.questions;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
@@ -21,14 +30,34 @@ export default function AnswersPage() {
             </h1>
             <div className="w-24"></div> {/* Spacer for centering */}
           </div>
-          <p className="text-xl text-gray-600">
-            All {mockQuestions.length} questions with correct answers
-          </p>
         </div>
+
+        {/* Quiz Set Tabs */}
+        <div className="flex flex-wrap gap-2 mb-8 justify-center">
+          {quizSets.map(set => (
+            <button
+              key={set.id}
+              onClick={() => setActiveSetId(set.id)}
+              className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                activeSetId === set.id
+                  ? `bg-gradient-to-r ${set.color} text-white shadow-lg scale-105`
+                  : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:shadow'
+              }`}
+            >
+              {set.icon} {set.title}
+              <span className="ml-1.5 opacity-75">({set.questions.length})</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Active set subtitle */}
+        <p className="text-center text-xl text-gray-600 mb-8">
+          {activeSet.icon} {activeSet.title} — {questions.length} questions with correct answers
+        </p>
 
         {/* Questions Grid */}
         <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-          {mockQuestions.map((question, index) => (
+          {questions.map((question, index) => (
             <div key={question.id} className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
               {/* Question Header */}
               <div className="flex items-start space-x-3 mb-4">
@@ -89,11 +118,11 @@ export default function AnswersPage() {
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Summary</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-              <div className="text-3xl font-bold text-blue-600">{mockQuestions.length}</div>
+              <div className="text-3xl font-bold text-blue-600">{questions.length}</div>
               <div className="text-sm text-blue-700">Total Questions</div>
             </div>
             <div className="bg-green-50 p-4 rounded-xl border border-green-200">
-              <div className="text-3xl font-bold text-green-600">{mockQuestions.length}</div>
+              <div className="text-3xl font-bold text-green-600">{questions.length}</div>
               <div className="text-sm text-green-700">Answers Provided</div>
             </div>
             <div className="bg-purple-50 p-4 rounded-xl border border-purple-200">

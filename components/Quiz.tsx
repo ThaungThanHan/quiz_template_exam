@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Question, QuizState } from '@/types/quiz';
-import { mockQuestions } from '@/data/questions';
+import { QuizSet } from '@/types/quizSet';
+import { quizSets } from '@/data/quizSets';
+import QuizSelector from '@/components/QuizSelector';
 import WelcomeScreen from '@/components/WelcomeScreen';
 import QuestionCard from '@/components/QuestionCard';
 import ResultsScreen from '@/components/ResultsScreen';
@@ -19,38 +21,56 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function Quiz() {
-  const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>(mockQuestions);
+  const [selectedQuizSet, setSelectedQuizSet] = useState<QuizSet | null>(null);
+  const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
 
   const [quizState, setQuizState] = useState<QuizState>({
     currentQuestion: 0,
     score: 0,
-    answers: new Array(mockQuestions.length).fill(null),
+    answers: [],
     showResult: false,
     quizCompleted: false
   });
 
   const [quizStarted, setQuizStarted] = useState(false);
-  
+
   // Preload audio voices when component mounts
   useEffect(() => {
     const audio = QuizAudio.getInstance();
     audio.preloadVoices();
   }, []);
 
+  const handleSelectQuiz = (quizSet: QuizSet) => {
+    setSelectedQuizSet(quizSet);
+  };
+
   const handleStartQuiz = () => {
-    setShuffledQuestions(shuffleArray(mockQuestions));
+    if (!selectedQuizSet) return;
+    // Shuffle both question order and each question's options
+    const shuffled = shuffleArray(selectedQuizSet.questions).map(q => ({
+      ...q,
+      options: shuffleArray(q.options),
+    }));
+    setShuffledQuestions(shuffled);
+    setQuizState({
+      currentQuestion: 0,
+      score: 0,
+      answers: new Array(shuffled.length).fill(null),
+      showResult: false,
+      quizCompleted: false
+    });
     setQuizStarted(true);
   };
 
   const handleAnswerSelect = (answerIndex: number) => {
     const newAnswers = [...quizState.answers];
     newAnswers[quizState.currentQuestion] = answerIndex;
-    
+
     const currentQuestion = shuffledQuestions[quizState.currentQuestion];
     const selectedOption = currentQuestion.options[answerIndex];
     const isCorrect = selectedOption === currentQuestion.answer;
     const newScore = quizState.score + (isCorrect ? 1 : 0);
-    
+
     setQuizState(prev => ({
       ...prev,
       answers: newAnswers,
@@ -78,24 +98,37 @@ export default function Quiz() {
     setQuizState({
       currentQuestion: 0,
       score: 0,
-      answers: new Array(mockQuestions.length).fill(null),
+      answers: [],
       showResult: false,
       quizCompleted: false
     });
     setQuizStarted(false);
+    setSelectedQuizSet(null);
+    setShuffledQuestions([]);
   };
 
-  // Welcome Screen
+  // Step 1: Quiz Selector
+  if (!selectedQuizSet) {
+    return (
+      <QuizSelector
+        quizSets={quizSets}
+        onSelectQuiz={handleSelectQuiz}
+      />
+    );
+  }
+
+  // Step 2: Welcome Screen
   if (!quizStarted) {
     return (
       <WelcomeScreen
-        totalQuestions={mockQuestions.length}
+        totalQuestions={selectedQuizSet.questions.length}
+        quizSetId={selectedQuizSet.id}
         onStartQuiz={handleStartQuiz}
       />
     );
   }
 
-  // Results Screen
+  // Step 3: Results Screen
   if (quizState.quizCompleted) {
     return (
       <ResultsScreen
@@ -107,7 +140,7 @@ export default function Quiz() {
     );
   }
 
-  // Quiz Screen
+  // Step 4: Quiz Screen
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
       {/* Header */}
