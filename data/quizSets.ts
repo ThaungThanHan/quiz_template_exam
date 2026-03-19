@@ -4,6 +4,7 @@ import { mockQuestions as aseanStudyQuestions } from './asean-study';
 import { mockQuestions as eeGlobalQuestions } from './ee-global';
 import { mockQuestions as eeFinalQuestions } from './ee-final';
 import { mockQuestions as eeItQuestions } from './ee-it';
+import { mockQuestions as eeDtbiQuestions } from './ee-dtbi';
 
 export const quizSets: QuizSet[] = [
   {
@@ -45,5 +46,13 @@ export const quizSets: QuizSet[] = [
     icon: '💻',
     color: 'from-blue-600 to-cyan-500',
     questions: eeItQuestions,
+  },
+  {
+    id: 'ee-dtbi',
+    title: 'EE-DTBI',
+    description: `${eeDtbiQuestions.length} questions on business analytics, branding, digital business models & data governance.`,
+    icon: '📊',
+    color: 'from-purple-600 to-indigo-500',
+    questions: eeDtbiQuestions,
   },
 ];
