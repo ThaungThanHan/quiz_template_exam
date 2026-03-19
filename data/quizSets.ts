@@ -2,6 +2,8 @@ import { QuizSet } from '@/types/quizSet';
 import { mockQuestions } from './questions';
 import { mockQuestions as aseanStudyQuestions } from './asean-study';
 import { mockQuestions as eeGlobalQuestions } from './ee-global';
+import { mockQuestions as eeFinalQuestions } from './ee-final';
+import { mockQuestions as eeItQuestions } from './ee-it';
 
 export const quizSets: QuizSet[] = [
   {
@@ -27,5 +29,21 @@ export const quizSets: QuizSet[] = [
     icon: '🏛️',
     color: 'from-orange-500 to-amber-600',
     questions: eeGlobalQuestions,
+  },
+  {
+    id: 'ee-global-final',
+    title: 'EE-Global Final',
+    description: `${eeFinalQuestions.length} questions on UN history, specialized agencies, and 2023-2024 global events.`,
+    icon: '🏆',
+    color: 'from-red-500 to-pink-600',
+    questions: eeFinalQuestions,
+  },
+  {
+    id: 'ee-it',
+    title: 'EE-IT',
+    description: `${eeItQuestions.length} questions on computer systems, data science, digital literacy & emerging technologies.`,
+    icon: '💻',
+    color: 'from-blue-600 to-cyan-500',
+    questions: eeItQuestions,
   },
 ];
