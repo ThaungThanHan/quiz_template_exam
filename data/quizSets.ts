@@ -6,6 +6,7 @@ import { mockQuestions as eeFinalQuestions } from './ee-final';
 import { mockQuestions as eeItQuestions } from './ee-it';
 import { mockQuestions as eeDtbiQuestions } from './ee-dtbi';
 import {mockQuestions as ugs567Questions} from './ugs-567';
+import {mockQuestions as ugs8910Questions} from './ugs-8910';
 
 export const quizSets: QuizSet[] = [
   // {
@@ -64,4 +65,12 @@ export const quizSets: QuizSet[] = [
     color: 'from-purple-600 to-indigo-500',
     questions: ugs567Questions,
   },
+  {
+    id: 'ugs-8910',
+    title: 'UGS-8910',
+    description: `${ugs8910Questions.length} questions on USG Chapter 8 9 10`,
+    icon: '📊',
+    color: 'from-purple-600 to-indigo-500',
+    questions: ugs8910Questions,
+  }
 ];
